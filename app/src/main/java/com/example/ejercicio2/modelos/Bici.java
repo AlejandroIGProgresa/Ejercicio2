@@ -1,6 +1,8 @@
 package com.example.ejercicio2.modelos;
 
-public class Bici {
+import java.io.Serializable;
+
+public class Bici implements Serializable {
     private String marca;
     private int pulgadas;
 

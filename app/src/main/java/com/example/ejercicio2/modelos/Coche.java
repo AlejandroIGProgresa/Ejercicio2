@@ -1,6 +1,8 @@
 package com.example.ejercicio2.modelos;
 
-public class Coche {
+import java.io.Serializable;
+
+public class Coche implements Serializable {
     private String marca, modelos, color;
 
     public Coche(String marca, String modelos, String color) {

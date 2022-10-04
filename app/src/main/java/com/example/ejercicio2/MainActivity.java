@@ -36,23 +36,25 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> launcherMotos;
     private ActivityResultLauncher<Intent> launcherBicis;
 
+    private ArrayList<Coche> coches;
+    private ArrayList<Moto> motos;
+    private ArrayList<Bici> bicis;
 
-    private static ArrayList<Coche> coches = new ArrayList<>();
-    private static ArrayList<Moto> motos = new ArrayList<>();
-    private static ArrayList<Bici> bicis = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        coches = new ArrayList<>();
+        motos = new ArrayList<>();
+        bicis = new ArrayList<>();
 
         inicializarVariables();
         inicializarLaunchers();
+        actualizarContadores();
 
-        lblCoches.setText("Número de coches: " + coches.size());
-        lblMotos.setText("Número de motos: " + motos.size());
-        lblBicis.setText("Número de bicis: " + bicis.size());
 
         btnCoches.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +87,12 @@ public class MainActivity extends AppCompatActivity {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK && result.getData() != null){
+                            Coche c = (Coche) result.getData().getExtras().getSerializable("COCHE");
+                            coches.add(c);
+                            actualizarContadores();
+                        }
+                        else Toast.makeText(MainActivity.this, "No se ha añadido ningún coche", Toast.LENGTH_SHORT).show();
 
                     }
                 }
@@ -96,6 +104,13 @@ public class MainActivity extends AppCompatActivity {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK && result.getData() != null){
+                            Moto c = (Moto) result.getData().getExtras().getSerializable("MOTO");
+                            motos.add(c);
+                            actualizarContadores();
+                        }
+                        else Toast.makeText(MainActivity.this, "No se ha añadido ninguna moto", Toast.LENGTH_SHORT).show();
+
 
                     }
                 }
@@ -105,8 +120,14 @@ public class MainActivity extends AppCompatActivity {
         launcherBicis = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
-                    @Override
                     public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK && result.getData() != null){
+                            Bici c = (Bici) result.getData().getExtras().getSerializable("BICI");
+                            bicis.add(c);
+                            actualizarContadores();
+                        }
+                        else Toast.makeText(MainActivity.this, "No se ha añadido ninguna bici", Toast.LENGTH_SHORT).show();
+
 
                     }
                 }
@@ -120,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
         lblBicis = findViewById(R.id.lblBicisText);
         lblCoches = findViewById(R.id.lblCochesMain);
         lblMotos = findViewById(R.id.lblMotosMain);
+    }
+
+    private void actualizarContadores(){
+        lblCoches.setText("Número de coches: " + coches.size());
+        lblMotos.setText("Número de motos: " + motos.size());
+        lblBicis.setText("Número de bicis: " + bicis.size());
     }
 
 
